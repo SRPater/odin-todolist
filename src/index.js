@@ -1,41 +1,53 @@
+import "./styles.css";
 import { Storage } from "./storage.js";
+import { renderUI } from "./ui.js";
 
 const storage = new Storage();
 
-// Show all projects
-console.log("Projects after initialization: ", storage.getAllProjects());
-
-// Add a new project
 const projectA = storage.createProject("Project A");
-console.log("Projects after adding Project A: ", storage.getAllProjects());
+const projectB = storage.createProject("Project B");
 
-// Select Project A and add tasks
+storage.addTaskToSelectedProject(
+  "Buy groceries",
+  "Milk, bread, eggs, and fruit",
+  "2026-01-28",
+  "Medium"
+);
+
+storage.addTaskToSelectedProject(
+  "Pay bills",
+  "Electricity and internet",
+  "2026-01-30",
+  "High"
+);
+
 storage.selectProject(projectA.id);
 storage.addTaskToSelectedProject(
-  "Task 1",
-  "Do something",
-  "2026-01-28",
-  "High",
+  "Finish report",
+  "Complete the quarterly report and email it to the team",
+  "2026-01-29",
+  "High"
 );
 
 storage.addTaskToSelectedProject(
-  "Task 2",
-  "Do something else",
-  "2026-01-29",
-  "Medium",
+  "Team meeting",
+  "Prepare slides for the Monday meeting",
+  "2026-02-01",
+  "Low"
 );
 
-console.log("Tasks in project A: ", storage.getTasksOfSelectedProject());
+storage.selectProject(storage.getAllProjects()[0].id);
 
-// Delete Task 1
-const task1Id = storage.getTasksOfSelectedProject()[0].id;
-storage.removeTaskFromSelectedProject(task1Id);
-console.log(
-  "Tasks in Project A after removing Task 1: ",
-  storage.getTasksOfSelectedProject(),
-);
+function render() {
+  renderUI({
+    projects: storage.getAllProjects(),
+    selectedProject: storage.getSelectedProject(),
+    tasks: storage.getTasksOfSelectedProject(),
+    onSelectProject: (projectId) => {
+      storage.selectProject(projectId);
+      render();
+    },
+  });
+}
 
-// Delete Project A
-storage.deleteProject(projectA.id);
-console.log("Projects after deleting Project A: ", storage.getAllProjects());
-console.log("Selected project after deletion: ", storage.getSelectedProject());
+render();
