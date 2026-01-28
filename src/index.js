@@ -1,27 +1,41 @@
-import { Project } from "./project.js";
-import { Task } from "./task.js";
+import { Storage } from "./storage.js";
 
-const general = new Project("General");
-console.log("New Project: ", general);
+const storage = new Storage();
 
-const task1 = new Task(
-  "Buy groceries",
-  "Milk, eggs, bread",
-  "2026-01-30",
+// Show all projects
+console.log("Projects after initialization: ", storage.getAllProjects());
+
+// Add a new project
+const projectA = storage.createProject("Project A");
+console.log("Projects after adding Project A: ", storage.getAllProjects());
+
+// Select Project A and add tasks
+storage.selectProject(projectA.id);
+storage.addTaskToSelectedProject(
+  "Task 1",
+  "Do something",
+  "2026-01-28",
   "High",
 );
 
-const task2 = new Task(
-  "Do laundry",
-  "Wash and fold clothes",
-  "2026-02-01",
+storage.addTaskToSelectedProject(
+  "Task 2",
+  "Do something else",
+  "2026-01-29",
   "Medium",
 );
 
-general.addTask(task1);
-general.addTask(task2);
+console.log("Tasks in project A: ", storage.getTasksOfSelectedProject());
 
-console.log("Project after adding tasks: ", general);
+// Delete Task 1
+const task1Id = storage.getTasksOfSelectedProject()[0].id;
+storage.removeTaskFromSelectedProject(task1Id);
+console.log(
+  "Tasks in Project A after removing Task 1: ",
+  storage.getTasksOfSelectedProject(),
+);
 
-general.removeTask(task1.id);
-console.log("Project after removing task1: ", general);
+// Delete Project A
+storage.deleteProject(projectA.id);
+console.log("Projects after deleting Project A: ", storage.getAllProjects());
+console.log("Selected project after deletion: ", storage.getSelectedProject());
