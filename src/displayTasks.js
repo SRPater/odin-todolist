@@ -1,63 +1,101 @@
 import { format } from "date-fns";
 
-export function displayTasks({ tasks }) {
+export function displayTasks({ project, tasks, onAddTask, onDeleteTask }) {
   const main = document.getElementById("main");
   main.innerHTML = "";
 
-  if (!tasks || tasks.length === 0) {
-    const placeholder = document.createElement("p");
-    placeholder.textContent = "No tasks yet.";
-    placeholder.classList.add("no-tasks");
-    main.appendChild(placeholder);
+  const header = document.createElement("div");
+  header.classList.add("task-header");
+
+  const title = document.createElement("h2");
+  title.classList.add("project-title");
+  title.textContent = `${project.name} (${tasks.length} tasks)`;
+
+  const addButton = document.createElement("button");
+  addButton.classList.add("add-task-button");
+  addButton.title = "Add Task";
+
+  const icon = document.createElement("span");
+  icon.classList.add("material-symbols-rounded");
+  icon.textContent = "add_circle";
+
+  addButton.appendChild(icon);
+  addButton.addEventListener("click", () => onAddTask());
+
+  header.appendChild(title);
+  header.appendChild(addButton);
+  main.appendChild(header);
+
+  const list = document.createElement("div");
+  list.classList.add("task-list");
+  main.appendChild(list);
+
+  if (tasks.length === 0) {
+    const empty = document.createElement("p");
+    empty.classList.add("no-tasks");
+    empty.textContent = "No tasks yet.";
+    list.appendChild(empty);
     return;
   }
 
-  tasks.forEach((task) => {
-    const card = document.createElement("div");
-    card.classList.add(
+  tasks.forEach(task => {
+    const taskCard = document.createElement("div");
+    taskCard.classList.add(
       "task-card",
-      `priority-${task.priority.toLowerCase() || "low"}`
+      `priority-${task.priority.toLowerCase()}`,
     );
 
-    const header = document.createElement("div");
-    header.classList.add("task-header");
-
-    const title = document.createElement("h3");
-    title.classList.add("task-title");
-    title.textContent = task.title;
-
-    const date = document.createElement("p");
-    date.classList.add("task-date");
-    try {
-      const due = new Date(task.dueDate);
-      date.textContent = `Due: ${format(due, "dd-MM-yyyy")}`;
-    } catch (e) {
-      date.textContent = `Due: ${task.dueDate}`;
-    }
-
-    const arrowSpan = document.createElement("span");
-    arrowSpan.classList.add("toggle-arrow");
-    arrowSpan.textContent = "▶";
+    const taskHeader = document.createElement("div");
+    taskHeader.classList.add("task-card-header");
 
     const titleContainer = document.createElement("div");
     titleContainer.classList.add("task-title-container");
-    titleContainer.appendChild(title);
-    titleContainer.appendChild(date);
 
-    header.appendChild(titleContainer);
-    header.appendChild(arrowSpan);
+    const taskTitle = document.createElement("h3");
+    taskTitle.classList.add("task-title");
+    taskTitle.textContent = task.title;
 
-    const description = document.createElement("div");
+    const taskDate = document.createElement("p");
+    taskDate.classList.add("task-date");
+    taskDate.textContent = format(new Date(task.dueDate), "dd-MM-yyyy");
+
+    titleContainer.appendChild(taskTitle);
+    titleContainer.appendChild(taskDate);
+
+    const arrow = document.createElement("span");
+    arrow.classList.add("toggle-arrow", "material-symbols-outlined");
+    arrow.textContent = "keyboard_arrow_right";
+
+    taskHeader.appendChild(titleContainer);
+    taskHeader.appendChild(arrow);
+
+    const description = document.createElement("p");
     description.classList.add("task-description");
     description.textContent = task.description;
 
-    header.addEventListener("click", () => {
+    const deleteButton = document.createElement("span");
+    deleteButton.classList.add(
+      "material-symbols-outlined",
+      "delete-task-button",
+    );
+    deleteButton.textContent = "delete";
+    deleteButton.title = "Delete task";
+
+    description.appendChild(deleteButton);
+
+    taskHeader.addEventListener("click", () => {
       description.classList.toggle("expanded");
-      arrowSpan.textContent = description.classList.contains("expanded") ? "▼" : "▶";
+      arrow.textContent = description.classList.contains("expanded")
+        ? "keyboard_arrow_down"
+        : "keyboard_arrow_right";
     });
 
-    card.appendChild(header);
-    card.appendChild(description);
-    main.appendChild(card);
+    deleteButton.addEventListener("click", () => {
+      onDeleteTask(task.id);
+    });
+
+    taskCard.appendChild(taskHeader);
+    taskCard.appendChild(description);
+    list.appendChild(taskCard);
   });
 }

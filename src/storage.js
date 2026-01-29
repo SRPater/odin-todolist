@@ -40,7 +40,7 @@ export class Storage {
     return this.selectedProject;
   }
 
-  getAllProjects() {
+  getProjects() {
     return this.projects;
   }
 
