@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { openDeleteTaskModal } from "./deleteTask.js";
 
 export function displayTasks({ project, tasks, onAddTask, onDeleteTask }) {
   const main = document.getElementById("main");
@@ -91,7 +92,11 @@ export function displayTasks({ project, tasks, onAddTask, onDeleteTask }) {
     });
 
     deleteButton.addEventListener("click", () => {
-      onDeleteTask(task.id);
+      openDeleteTaskModal({
+        taskName: task.title,
+        projectName: project.name,
+        onConfirm: () => onDeleteTask(task.id),
+      });
     });
 
     taskCard.appendChild(taskHeader);

@@ -25,6 +25,14 @@ function renderApp() {
         renderApp();
       });
     },
+    onDeleteProject: (projectId) => {
+      if (selectedProject.id === projectId) {
+        storage.selectProject(projects[0].id);
+      }
+
+      storage.deleteProject(projectId);
+      renderApp();
+    },
   });
 
   if (selectedProject) {
@@ -42,8 +50,8 @@ function renderApp() {
           renderApp();
         });
       },
-      onDeleteTask: (id) => {
-        selectedProject.removeTask(id);
+      onDeleteTask: (taskId) => {
+        selectedProject.removeTask(taskId);
         renderApp();
       },
     });
