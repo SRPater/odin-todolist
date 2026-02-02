@@ -1,4 +1,3 @@
-import { openAddProjectModal } from "./addProject.js";
 import { openDeleteProjectModal } from "./deleteProject.js";
 
 export function displayProjects({
