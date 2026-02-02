@@ -25,6 +25,13 @@ function renderApp() {
         renderApp();
       });
     },
+    onEditProject: (project) => {
+      openAddProjectModal((newName) => {
+        project.name = newName;
+        storage.save();
+        renderApp();
+      }, project);
+    },
     onDeleteProject: (projectId) => {
       if (selectedProject.id === projectId) {
         storage.selectProject(projects[0].id);
@@ -49,6 +56,19 @@ function renderApp() {
           );
           renderApp();
         });
+      },
+      onEditTask: (task) => {
+        openAddTaskModal(
+          (updatedData) => {
+            task.title = updatedData.title;
+            task.description = updatedData.description;
+            task.dueDate = updatedData.dueDate;
+            task.priority = updatedData.priority;
+            storage.save();
+            renderApp();
+          },
+          task,
+        );
       },
       onDeleteTask: (taskId) => {
         selectedProject.removeTask(taskId);

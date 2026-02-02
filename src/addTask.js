@@ -1,7 +1,7 @@
 import { openModal } from "./modal.js";
 import { format } from "date-fns";
 
-export function openAddTaskModal(onConfirm) {
+export function openAddTaskModal(onConfirm, taskToEdit = null) {
   const inputTitle = document.createElement("input");
   inputTitle.type = "text";
   inputTitle.placeholder = "Task Title";
@@ -33,8 +33,15 @@ export function openAddTaskModal(onConfirm) {
     selectPriority.appendChild(option);
   });
 
+  if (taskToEdit) {
+    inputTitle.value = taskToEdit.title;
+    inputDescription.value = taskToEdit.description;
+    inputDue.value = taskToEdit.dueDate;
+    selectPriority.value = taskToEdit.priority;
+  }
+
   openModal({
-    titleText: "New Task",
+    titleText: taskToEdit ? "Edit Task" : "New Task",
     bodyElements: [
       inputTitle,
       inputDescription,
@@ -43,7 +50,7 @@ export function openAddTaskModal(onConfirm) {
       priorityLabel,
       selectPriority,
     ],
-    confirmText: "Add",
+    confirmText: taskToEdit ? "Save" : "Add",
     onConfirm: (close) => {
       const title = inputTitle.value.trim();
       if (!title) return;

@@ -1,3 +1,4 @@
+import { openAddProjectModal } from "./addProject.js";
 import { openDeleteProjectModal } from "./deleteProject.js";
 
 export function displayProjects({
@@ -5,6 +6,7 @@ export function displayProjects({
   selectedProject,
   onSelectProject,
   onAddProject,
+  onEditProject,
   onDeleteProject,
 }) {
   const sidebar = document.getElementById("sidebar");
@@ -45,12 +47,29 @@ export function displayProjects({
     item.appendChild(name);
 
     if (index !== 0) {
+      const buttonContainer = document.createElement("div");
+      buttonContainer.classList.add("project-buttons");
+
+      const editButton = document.createElement("span");
+      editButton.classList.add(
+        "material-symbols-outlined",
+        "edit-project-button",
+      );
+      editButton.textContent = "edit";
+      editButton.title = "Edit Project";
+
       const deleteButton = document.createElement("span");
       deleteButton.classList.add(
         "material-symbols-outlined",
-        "delete-project-button",);
+        "delete-project-button",
+      );
       deleteButton.textContent = "delete";
       deleteButton.title = "Delete Project";
+
+      editButton.addEventListener("click", (e) => {
+        e.stopPropagation();
+        onEditProject(project);
+      });
 
       deleteButton.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -60,7 +79,9 @@ export function displayProjects({
         });
       });
 
-      item.appendChild(deleteButton);
+      buttonContainer.appendChild(editButton);
+      buttonContainer.appendChild(deleteButton);
+      item.appendChild(buttonContainer);
     }
 
     sidebar.appendChild(item);

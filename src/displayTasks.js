@@ -1,7 +1,13 @@
 import { format } from "date-fns";
 import { openDeleteTaskModal } from "./deleteTask.js";
 
-export function displayTasks({ project, tasks, onAddTask, onDeleteTask }) {
+export function displayTasks({
+  project,
+  tasks,
+  onAddTask,
+  onEditTask,
+  onDeleteTask,
+}) {
   const main = document.getElementById("main");
   main.innerHTML = "";
 
@@ -74,6 +80,14 @@ export function displayTasks({ project, tasks, onAddTask, onDeleteTask }) {
     description.classList.add("task-description");
     description.textContent = task.description;
 
+    const editButton = document.createElement("span");
+    editButton.classList.add(
+      "material-symbols-outlined",
+      "edit-task-button",
+    );
+    editButton.textContent = "edit";
+    editButton.title = "Edit task";
+
     const deleteButton = document.createElement("span");
     deleteButton.classList.add(
       "material-symbols-outlined",
@@ -82,6 +96,7 @@ export function displayTasks({ project, tasks, onAddTask, onDeleteTask }) {
     deleteButton.textContent = "delete";
     deleteButton.title = "Delete task";
 
+    description.appendChild(editButton);
     description.appendChild(deleteButton);
 
     taskHeader.addEventListener("click", () => {
@@ -90,6 +105,8 @@ export function displayTasks({ project, tasks, onAddTask, onDeleteTask }) {
         ? "keyboard_arrow_down"
         : "keyboard_arrow_right";
     });
+
+    editButton.addEventListener("click", () => onEditTask(task));
 
     deleteButton.addEventListener("click", () => {
       openDeleteTaskModal({

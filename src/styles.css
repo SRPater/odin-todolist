@@ -107,14 +107,25 @@ body {
   font-weight: bold;
 }
 
+.project-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-project-button,
 .delete-project-button {
   cursor: pointer;
   border-radius: 50%;
   padding: 2px;
   opacity: 0.8;
   transition: opacity 0.1s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
 }
 
+.edit-project-button:hover,
 .delete-project-button:hover {
   opacity: 1;
 }
@@ -205,6 +216,26 @@ body {
 
 .task-description.expanded {
   display: block;
+}
+
+.edit-task-button {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 3rem;
+  background-color: #4a65a5;
+  color: white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.edit-task-button:hover {
+  opacity: 0.8;
 }
 
 .delete-task-button {
