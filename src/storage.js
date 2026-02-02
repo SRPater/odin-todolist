@@ -34,7 +34,7 @@ export class Storage {
       }
     } else {
       const general = new Project("General");
-      this.project.push(general);
+      this.projects.push(general);
       this.selectedProject = general;
     }
 
